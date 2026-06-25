@@ -118,6 +118,13 @@ SENSOR_DESCRIPTIONS: dict[str, SensorEntityDescription] = {
         native_unit_of_measurement=UnitOfLength.MILLIMETERS,
         state_class=SensorStateClass.MEASUREMENT,
     ),
+    "sensor_reading": SensorEntityDescription(
+        key="sensor_reading",
+        translation_key="sensor_reading",
+        device_class=SensorDeviceClass.DISTANCE,
+        native_unit_of_measurement=UnitOfLength.MILLIMETERS,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
     "tank_level_percent": SensorEntityDescription(
         key="tank_level_percent",
         translation_key="tank_level_percent",
@@ -139,6 +146,7 @@ SENSOR_DESCRIPTIONS: dict[str, SensorEntityDescription] = {
     ),
 }
 
+_SENSOR_READING_KEY = "sensor_reading"
 _TANK_LEVEL_PERCENT_KEY = "tank_level_percent"
 _TANK_VOLUME_KEY = "tank_volume"
 _MEDIUM_TYPE_KEY = "medium_type"
@@ -331,6 +339,16 @@ def make_sensor_update_to_bluetooth_data_update(
                     ]
                     entity_names[pct_entity_key] = None
                     raw_level = sensor_values.native_value
+
+                    senor_reading_entity_key = PassiveBluetoothEntityKey(
+                        _SENSOR_READING_KEY, device_key.device_id
+                    )
+                    entity_descriptions[senor_reading_entity_key] = SENSOR_DESCRIPTIONS[
+                        _SENSOR_READING_KEY
+                    ]
+                    entity_names[senor_reading_entity_key] = None
+                    entity_data[senor_reading_entity_key] = raw_level
+
                     fill_pct: float | None = None
                     if isinstance(raw_level, (int, float)):
                         level_for_calc = float(raw_level)

@@ -167,6 +167,9 @@
                     "custom": "Custom"
                 }
             },
+            "sensor_reading": {
+                "name": "Sensor reading"
+            },
             "tank_level_percent": {
                 "name": "Tank fill"
             },
